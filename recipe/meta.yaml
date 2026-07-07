@@ -23,10 +23,11 @@ requirements:
     - lld             # [osx]
   host:
     - postgresql {{ postgresql }}
-    - libpq                      # [not win]
+    - libpq {{ libpq }}
   run:
     - {{ pin_compatible('libpq', max_pin='x.x.x') }}        # [win]
-    - libpq                                                 # [not win]
+    - postgresql {{ postgresql }}                           # [win]
+    - libpq {{ libpq }}                                     # [not win]
 
 test:
   commands:
