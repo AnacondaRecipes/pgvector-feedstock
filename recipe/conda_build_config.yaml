@@ -1,8 +1,2 @@
-c_compiler:                    # [win]
-  - vs2019                     # [win]
-cxx_compiler:                  # [win]
-  - vs2019                     # [win]
-libpq:
-  - '17'
 postgresql:
   - '17'
