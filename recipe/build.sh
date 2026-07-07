@@ -16,6 +16,8 @@ else
   make DESTDIR="${PREFIX}" OPTFLAGS=""
   make install
 
+  # PBP osx workers may not have a valid system timezone for PostgreSQL.
+  export TZ=UTC
   initdb -D test_db
   pg_ctl -D test_db -l test.log start
 
