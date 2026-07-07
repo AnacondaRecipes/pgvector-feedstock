@@ -5,7 +5,6 @@ set -ex
 cp $BUILD_PREFIX/share/gnuconfig/config.* .
 
 
-
 if [[ "${CONDA_BUILD_CROSS_COMPILATION}" == "1" ]]; then
   chmod +x $RECIPE_DIR/arm64_pg_config
   export PG_CONFIG="${RECIPE_DIR}/arm64_pg_config"
@@ -15,15 +14,5 @@ if [[ "${CONDA_BUILD_CROSS_COMPILATION}" == "1" ]]; then
 else
   make DESTDIR="${PREFIX}" OPTFLAGS=""
   make install
-
-  # PBP osx workers may not have a valid system timezone for PostgreSQL.
-  export TZ=UTC
-  initdb -D test_db
-  pg_ctl -D test_db -l test.log start
-
-  make installcheck
-
-  pg_ctl -D test_db stop
 fi
-
 

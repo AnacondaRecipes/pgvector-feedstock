@@ -4,3 +4,5 @@ cxx_compiler:                  # [win]
   - vs2019                     # [win]
 libpq:                         # [not win]
   - '17'                       # [not win]
+postgresql:
+  - '17'
