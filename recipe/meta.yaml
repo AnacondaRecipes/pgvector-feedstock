@@ -25,9 +25,10 @@ requirements:
     - postgresql {{ libpq }}
     - libpq {{ libpq }}         # [not win]
   run:
-    - {{ pin_compatible('libpq', max_pin='x.x.x') }}     # [win]  # analint: cbc_dep_in_run_missing_from_host  # win host uses postgresql's bundled libpq; standalone libpq omitted to fix overlinking (PKG-15121)
-    - postgresql {{ libpq }}.*                           # [win]
-    - libpq                                              # [not win]
+    # The extension links the PostgreSQL server (postgres.exe on win), never libpq —
+    # so the true runtime requirement is the server major; libpq pinning comes from
+    # postgresql's run_exports (host) automatically.
+    - postgresql {{ libpq }}.*
 
 test:
   commands:
