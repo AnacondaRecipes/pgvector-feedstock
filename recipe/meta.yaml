@@ -22,20 +22,22 @@ requirements:
     - make            # [unix]
     - lld             # [osx]
   host:
-    - postgresql {{ postgresql }}
+    - postgresql {{ libpq }}
     - libpq {{ libpq }}         # [not win]
   run:
-    - {{ pin_compatible('libpq', max_pin='x.x.x') }}        # [win]
-    - postgresql {{ postgresql }}                           # [win]
-    - libpq                                                 # [not win]
+    - {{ pin_compatible('libpq', max_pin='x.x.x') }}     # [win]
+    - postgresql =={{ libpq }}                           # [win]
+    - libpq                                              # [not win]
 
 test:
   commands:
     - test -f $PREFIX/lib/vector.so                                                     # [linux]
     - test -f $PREFIX/lib/vector.dylib                                                  # [osx]
+    - test -f $PREFIX/include/server/extension/vector/vector.h                          # [unux]
     - test -f $PREFIX/share/extension/vector--{{ version }}.sql                         # [unix]
     - test -f $PREFIX/share/extension/vector.control                                    # [unix]
     - if not exist %LIBRARY_LIB%\vector.dll exit 1                                      # [win]
+    - if not exist %LIBRARY_INC%\server\extension\vector\vector.h exit 1                # [win]
     - if not exist %LIBRARY_PREFIX%\share\extension\vector--{{ version }}.sql exit 1    # [win]
     - if not exist %LIBRARY_PREFIX%\share\extension\vector.control exit 1               # [win]
 
