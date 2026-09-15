@@ -25,15 +25,15 @@ requirements:
     - postgresql {{ libpq }}
     - libpq {{ libpq }}         # [not win]
   run:
-    - {{ pin_compatible('libpq', max_pin='x.x.x') }}     # [win]
-    - postgresql =={{ libpq }}                           # [win]
+    - {{ pin_compatible('libpq', max_pin='x.x.x') }}     # [win]  # analint: cbc_dep_in_run_missing_from_host  # win host uses postgresql's bundled libpq; standalone libpq omitted to fix overlinking (PKG-15121)
+    - postgresql {{ libpq }}.*                           # [win]
     - libpq                                              # [not win]
 
 test:
   commands:
     - test -f $PREFIX/lib/vector.so                                                     # [linux]
     - test -f $PREFIX/lib/vector.dylib                                                  # [osx]
-    - test -f $PREFIX/include/server/extension/vector/vector.h                          # [unux]
+    - test -f $PREFIX/include/server/extension/vector/vector.h                          # [unix]
     - test -f $PREFIX/share/extension/vector--{{ version }}.sql                         # [unix]
     - test -f $PREFIX/share/extension/vector.control                                    # [unix]
     - if not exist %LIBRARY_LIB%\vector.dll exit 1                                      # [win]
