@@ -11,23 +11,25 @@ source:
 
 build:
   number: 1
+  # Plugin never DT_NEEDs libpq; host postgresql still exports it.
+  ignore_run_exports:
+    - libpq
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ stdlib("c") }}
-    - perl            # [build_platform == target_platform]
+    - perl
     - gnuconfig       # [unix]
-    - postgresql      # [build_platform != target_platform]
     - make            # [unix]
     - lld             # [osx]
   host:
     - postgresql {{ libpq }}
     - libpq {{ libpq }}         # [not win]
   run:
-    # The extension links the PostgreSQL server (postgres.exe on win), never libpq —
-    # so the true runtime requirement is the server major; libpq pinning comes from
-    # postgresql's run_exports (host) automatically.
+    # Server major is the runtime coupling (vector.dll imports postgres.exe;
+    # unix vector.so is a loadable module). libpq is not linked — its
+    # run_exports from host postgresql are ignored above.
     - postgresql {{ libpq }}.*
 
 test:
